@@ -1,8 +1,8 @@
 package com.codewithdilan;
 
 public enum MyColor {
-    Color1("#7FFD4"),
-    Color2("#808000"),
+    Color1("#808000"),
+    Color2("#326654"),
     Color3("#008000"),
     Color4("#800000"),
     Color5("#A52A2A"),

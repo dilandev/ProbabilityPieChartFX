@@ -31,36 +31,41 @@ public class HistogramAlphaBet extends Application {
 
         AnchorPane root = new AnchorPane();
 
-        Label lblDescription = new Label("Enter Number of Events :");
-        lblDescription.setLayoutX(50);
-        lblDescription.setLayoutY(199);
-        AnchorPane.setBottomAnchor(lblDescription, 284.0);
+        Label lblDescription = new Label("Enter Number of Events:");
+        AnchorPane.setBottomAnchor(lblDescription, 255.0);
         AnchorPane.setLeftAnchor(lblDescription, 50.0);
-        AnchorPane.setRightAnchor(lblDescription, 312.0);
+        AnchorPane.setRightAnchor(lblDescription, 310.0);
 
         TextField txtEvent = new TextField();
         txtEvent.setPrefSize(400, 25);
-        txtEvent.setLayoutX(50);
-        txtEvent.setLayoutY(225);
-        AnchorPane.setBottomAnchor(txtEvent, 250.0);
+        AnchorPane.setBottomAnchor(txtEvent, 220.0);
         AnchorPane.setLeftAnchor(txtEvent, 50.0);
         AnchorPane.setRightAnchor(txtEvent, 50.0);
 
         Button btnGenerate = new Button("Generate Chart");
         btnGenerate.setPrefSize(400, 48);
-        btnGenerate.setLayoutX(50);
-        btnGenerate.setLayoutY(262);
-        AnchorPane.setBottomAnchor(btnGenerate, 190.0);
+        AnchorPane.setBottomAnchor(btnGenerate, 160.0);
         AnchorPane.setLeftAnchor(btnGenerate, 50.0);
         AnchorPane.setRightAnchor(btnGenerate, 50.0);
+
+        Label lblErrorText = new Label("Enter Number of Events:");
+        lblErrorText.setPrefWidth(400.0);
+        AnchorPane.setBottomAnchor(lblErrorText, 130.0);
+        AnchorPane.setLeftAnchor(lblErrorText, 50.0);
+        AnchorPane.setRightAnchor(lblErrorText, 310.0);
+        lblErrorText.setStyle("-fx-text-fill:" + "#0000FF");
+        lblErrorText.setVisible(false);
 
         root.getChildren().add(lblDescription);
         root.getChildren().add(txtEvent);
         root.getChildren().add(btnGenerate);
+        root.getChildren().add(lblErrorText);
 
-        Scene scene = new Scene(root, 700, 500);
+        Scene scene = new Scene(root, 600, 400);
+        stage.setMinWidth(600);
+        stage.setMinHeight(400);
         stage.setScene(scene);
-        stage.setTitle("Histogram Alphabet");
+        stage.setTitle("Alphabet Character Frequency Pie Chart");
         stage.show();
 
         btnGenerate.setOnAction(new EventHandler<ActionEvent>() {
@@ -77,16 +82,20 @@ public class HistogramAlphaBet extends Application {
                         canvasWidth = root.getWidth();
                         if (count <= 25) {
                             pieChart.characterCount(filePath, count, canvasHeight, canvasWidth);
-                            stage.close();
+//                            stage.close();
                         } else {
-                            System.out.println("Please enter a number less than 26.");
+                            lblErrorText.setVisible(true);
+                            lblErrorText.setText("Maximum number of events supported is 25!");
                         }
 
                     } catch (NumberFormatException e) {
-                        System.out.println("Invalid Input");
+                        lblErrorText.setVisible(true);
+                        lblErrorText.setText("Invalid Input. Please enter a number between 0-26.");
                     }
 
                 } catch (FileNotFoundException ex) {
+                    lblErrorText.setVisible(true);
+                    lblErrorText.setText("File Not Found!");
                     System.out.println("File Not Found: " + ex);
                 }
             }
@@ -109,10 +118,8 @@ public class HistogramAlphaBet extends Application {
 
                 for (char c : strArray) {
                     if (charCountMap.containsKey(c)) {
-
                         charCountMap.put(c, charCountMap.get(c) + 1);
                     } else {
-
                         charCountMap.put(c, 1);
                     }
                     totalCount++;
@@ -140,10 +147,9 @@ public class HistogramAlphaBet extends Application {
                 arrayEventKey.add(listKey.get(i));
                 arrayEventValue.add(calculateProbability(listValue.get(i), totalCount));
             }
-            
+
             Slice slice = new Slice();
             slice.createSlice(arrayEventKey, arrayEventValue, canvasHeight, canvasWidth);
-
         }
 
         float calculateProbability(int charCount, int totalCount) {
@@ -154,14 +160,16 @@ public class HistogramAlphaBet extends Application {
 
         void createChart(int noOfArc, float arcCenterX, float arcCenterY, float arcRadiusX, float arcRadiusY, List<Float> listArcStartAngle, List<Float> listArcLength, List<String> listLegend) throws Exception {
             Stage chartStage = new Stage();
+            chartStage.setMinWidth(600);
+            chartStage.setMinHeight(400);
             AnchorPane root = new AnchorPane();
             String color = "";
             float yOffSet = 0;
 
             for (int i = 0; i < noOfArc; i++) {
-                color = MyColor.values()[i + 1].getColorCode();
+                color = MyColor.values()[i+1].getColorCode();
                 Arc arc = new Arc();
-                arc.setCenterX(arcCenterX);
+                arc.setCenterX(arcCenterX + 45);
                 arc.setCenterY(arcCenterY);
                 arc.setRadiusX(arcRadiusX);
                 arc.setRadiusY(arcRadiusY);
@@ -187,15 +195,12 @@ public class HistogramAlphaBet extends Application {
 
             Scene scene = new Scene(root, arcCenterX * 2, arcCenterY * 2);
             chartStage.setScene(scene);
-            chartStage.setTitle("Histogram Alphabet");
+            chartStage.setTitle("Alphabet Character Frequency Pie Chart");
             chartStage.show();
         }
-
     }
 
     public static void main(String[] args) {
-
         launch(args);
-
     }
 }

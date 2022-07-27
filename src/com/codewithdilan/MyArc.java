@@ -9,13 +9,12 @@ public class MyArc extends MyShape {
 
     void drawArc(List<String> listLegend, List<Float> listSlice, double canvasHeight, double canvasWidth) {
         MyArc myOval = new MyArc();
-        
-        
+
         int noOfArc = listSlice.size();
         float arcStartAngle, arcLength;
         List<Float> listArcStartAngle = new ArrayList<Float>();
         List<Float> listArcLength = new ArrayList<Float>();
-        
+
         myOval.setX1((float)canvasWidth / 2);
         myOval.setY1((float) canvasHeight / 2);
         if (canvasHeight < canvasWidth) {
@@ -25,16 +24,14 @@ public class MyArc extends MyShape {
             myOval.setX2((float) canvasWidth / 2-50);
             myOval.setY2((float) canvasWidth / 2-50);
         }
-        
+
         arcStartAngle = 90;
-        arcLength = 0;
-        
+
         for (int a = 0; a <noOfArc; a++) {
-            
             arcLength = 360 * listSlice.get(a);
             listArcStartAngle.add(arcStartAngle);
             listArcLength.add(arcLength);
-            
+
             arcStartAngle = arcStartAngle + arcLength;
         }
 
